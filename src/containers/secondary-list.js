@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchData } from '../actions/index';
 import _ from 'underscore';
-import DataGrid from 'react-datagrid';
-
-var columns = [
-
-    { name: 'index', title: '#', width: 50 },
-    { name: 'securityName', width: 250 },
-    { name: 'description',  width: 250  },
-    { name: 'currency' ,  width: 100},
-    { name: 'benchmarkSecurityDescription' ,  width: 250},
-    { name: 'bidSpreadVsBenchmark' ,  width: 100},
-    { name: 'bidSpreadVsGocCurve' ,  width: 100},
-    { name: 'bidSpreadVs3mCdor' ,  width: 100},
-    { name: 'bidSpreadVs3mUsdl' ,  width: 100},
-    { name: 'readableTimestamp' ,  width: 100}
-
-];
+import { Grid, Column, Cell } from 'eddyson-react-grid';
+import $ from 'jquery';
 
 class SecondaryList extends Component {
 
@@ -32,24 +19,53 @@ class SecondaryList extends Component {
     this.setState({secondaryLevels: this.props.secondaryLevels});
   }
 
+
+  componentDidUpdate(){
+
+    const that = this;
+    const element = ReactDOM.findDOMNode(that.refs.grid);
+    const chevIcon = document.createElement('i');
+    const singalIcon = document.createElement('i');
+
+    $(element).find('table').addClass('table-striped');
+    $(element).find('thead tr').css('color','#4f9fcf');
+    $(element).find('thead tr button').css({'display':'none'});
+    $(element).find('tr td:first-child').css('color', '#4f9fcf');
+    const el = $(element).find('thead tr:first-child th:first-child');
+    $(element).find('thead tr:first-child th:last-child').css('display', 'none');
+    $(chevIcon).addClass('fa fa-chevron-down').addClass('chev-icon');
+    $(el).append(chevIcon);
+    $(singalIcon).addClass('fa fa-signal signal-icon');
+    $(element).find('tr td:last-child').append(singalIcon);
+
+  }
+
   renderList() {
+    if(this.props.secondaryLevels.length > 0){
 
+      for(var i = 0; i < this.props.secondaryLevels[0].secondaryLevels.length; i++){
+        _.extend(this.props.secondaryLevels[0].secondaryLevels[i], {id: i}, {signal: ''});
+      }
 
-  if(this.props.secondaryLevels.length > 0){
-    console.log('sec' ,this.props.secondaryLevels[0].secondaryLevels);
-
-    for(var i = 0; i < this.props.secondaryLevels[0].secondaryLevels.length; i++){
-      _.extend(this.props.secondaryLevels[0].secondaryLevels[i], {id: i});
-    }
-
-    return  (
-        <DataGrid
-        			idProperty='id'
-        			dataSource={this.props.secondaryLevels[0].secondaryLevels}
-        			columns={columns}
-        			style={{height: 900, width: 1500}}
-		    />);
-    }
+      return  (
+        <div id="grid-comp">
+            <Grid objects={this.props.secondaryLevels[0].secondaryLevels} ref="grid">
+              <Column name="bidSpreadVsBenchmark" label="Benchmark"/>
+              <Column name="description" label="Issue Description" className="test"/>
+              <Column name="currency" label="Currency"/>
+              <Column name="yearsRemaining" label="Years Remaining"/>
+              <Column name="benchmarkSecurityDescription" label="Benchmark"/>
+              <Column name="securityName" label="Issuer"/>
+              <Column name="bidSpreadVsGocCurve" label="GoC Curve"/>
+              <Column name="bidSpreadVs3mCdor" label="3M CDOR"/>
+              <Column name="bidSpreadVs3mUsdl" label="3M USDL"/>
+              <Column name="readableTimestamp" label="Updated"/>
+              <Column name="signal" label="Signal"/>
+              <Column name="id" hide={true} />
+            </Grid>
+        </div>
+        );
+     }
   }
 
   render() {
