@@ -27,20 +27,19 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "ag-grid": "^7.1.0",
     "axios": "^0.15.3",
     "babel-preset-stage-1": "^6.1.18",
+    "eddyson-react-grid": "^1.0.0-alpha-6",
+    "font-awesome": "^4.7.0",
+    "jquery": "^2.2.4",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
     "react-addons-shallow-compare": "^15.4.1",
-    "react-datagrid": "^2.1.2",
     "react-dom": "^0.14.3",
     "react-redux": "^4.0.0",
-    "react-redux-grid": "^5.1.0",
     "react-router": "^2.0.1",
     "react-virtualized": "^8.8.1",
     "redux": "^3.0.4",
-    "redux-grid": "^0.5.8",
     "redux-promise": "^0.5.3",
     "underscore": "^1.8.3"
   }
